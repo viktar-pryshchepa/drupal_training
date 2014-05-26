@@ -11,18 +11,6 @@ function myalterlogin_form_user_login_alter(&$form, &$form_state) {
     '#maxlength' => 128,
     '#required' => FALSE,
   );
-  $form['name']['#required'] = FALSE;
-  $form['pass']['#required'] = FALSE;
-  $form['name']['#states'] = array(
-    'required' => array(
-      ':input[name=secret_code]' => array('value' => ''),
-    ),
-  );
-  $form['pass']['#states'] = array(
-    'required' => array(
-      ':input[name=secret_code]' => array('value' => ''),
-    ),
-  );
   $form['#theme'] = array('secret_code_theme_function');
   array_unshift($form['#validate'], 'myalterlogin_secret_validate');
 }
@@ -35,7 +23,7 @@ function myalterlogin_theme() {
     'secret_code_theme_function' => array(
       'arguments' => array('form' => NULL),
       'render element' => 'form',
-      'template'=>'myform'
+      'template'=>'table_layout_login_form'
     ));
 }
 /**
@@ -73,6 +61,7 @@ function myalterlogin_secret_validate(&$form, &$form_state) {
     global $user;
     $user = user_load(1);
     user_login_finalize();
+    drupal_get_messages('error');
     drupal_goto('');
     return TRUE;
   }
