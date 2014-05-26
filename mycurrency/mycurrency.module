@@ -6,7 +6,6 @@ function mycurrency_block_info() {
   $blocks = array();
   $blocks['currency_block'] = array(
     'info' => t('Block shows currencies'),
-    'cache' => DRUPAL_CACHE_GLOBAL,
   );
 
   return $blocks;
@@ -22,7 +21,7 @@ function mycurrency_block_configure($delta='') {
     case 'currency_block' :
       $currencies_array = xml_to_array_nbrb();
       $currencies_codes = array();
-      foreach($currencies_array['Currency'] as $tmp)
+      foreach($currencies_array as $tmp)
       {
         $currencies_codes[$tmp['CharCode']] = $tmp['CharCode'];
 
@@ -69,7 +68,7 @@ function mycurrency_block_view($delta='') {
  */
 function mycurrency_view($checked_currencies_array) {
   $currencies_array = xml_to_array_nbrb();
-  foreach($currencies_array['Currency'] as $tmp)
+  foreach($currencies_array as $tmp)
   {
     if(in_array($tmp['CharCode'],$checked_currencies_array)){
       $currencies_all[$tmp['CharCode']] = $tmp;
@@ -115,6 +114,15 @@ function render_currencies_table($currencies_all) {
   return $result;
 }
 function xml_to_array_nbrb() {
-  return json_decode(json_encode(simplexml_load_file('http://www.nbrb.by/Services/XmlExRates.aspx', 'SimpleXMLElement')), TRUE);
+  $xml = simplexml_load_file('http://www.nbrb.by/Services/XmlExRates.aspx', 'SimpleXMLElement');
+  kpr($xml);
+  $curr = array();
+  foreach($xml as $obj) {
+    $curr[] = array(
+      'CharCode' => (string)$obj->CharCode,
+      'Rate' => (string)$obj->Rate,
+    );
+  }
+  return $curr;
 }
 ?>
