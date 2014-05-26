@@ -115,7 +115,6 @@ function render_currencies_table($currencies_all) {
 }
 function xml_to_array_nbrb() {
   $xml = simplexml_load_file('http://www.nbrb.by/Services/XmlExRates.aspx', 'SimpleXMLElement');
-  kpr($xml);
   $curr = array();
   foreach($xml as $obj) {
     $curr[] = array(
