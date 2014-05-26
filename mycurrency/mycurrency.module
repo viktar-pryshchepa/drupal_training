@@ -41,6 +41,7 @@ function mycurrency_block_save($delta = '', $edit = array()) {
     case 'currency_block' :
       $edit['currency_checkbox'] = array_filter($edit['currency_checkbox']);
       variable_set('currencies_to_show', $edit['currency_checkbox']);
+      cache_clear_all('mycurrency_cache_block','cache_block');
       break;
   }
   return;
